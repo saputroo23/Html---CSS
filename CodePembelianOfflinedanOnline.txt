@@ -1,0 +1,90 @@
+package KondisionalStatement.Lab;
+
+import java.util.Scanner;
+
+public class dayOfweek {
+    enum KategoriUmur {
+        ANAK, DEWASA, LANSIA
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Masukkan jumlah pengunjung: ");
+        int jumlahPengunjung = scanner.nextInt();
+        KategoriUmur[] kategoriUmur = new KategoriUmur[jumlahPengunjung];
+
+        for (int i = 0; i < jumlahPengunjung; i++) {
+            System.out.print("Masukkan kategori umur pengunjung " + (i + 1) + "\n1. Anak-anak\n2. Dewasa\n3. Lansia\nMasukan disini :  ");
+            int pilihanUmur = scanner.nextInt();
+
+            switch (pilihanUmur) {
+                case 1:
+                    kategoriUmur[i] = KategoriUmur.ANAK;
+                    break;
+                case 2:
+                    kategoriUmur[i] = KategoriUmur.DEWASA;
+                    break;
+                case 3:
+                    kategoriUmur[i] = KategoriUmur.LANSIA;
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid. Silakan coba lagi.");
+                    i--;
+                    break;
+            }
+        }
+
+        System.out.print("Masukkan hari kunjungan (Misal: Senin, Selasa, dst.): ");
+        String hariKunjungan = scanner.next().toLowerCase();
+        boolean adalahAkhirPekan = (hariKunjungan.equals("sabtu") || hariKunjungan.equals("minggu"));
+
+        System.out.print("Apakah Anda ingin paket makan siang? (y/n): ");
+        boolean inginPaketMakan = scanner.next().toLowerCase().startsWith("y");
+
+        double hargaTiketAnak = adalahAkhirPekan ? 25 : 15;
+        double hargaTiketDewasa = adalahAkhirPekan ? 45 : 35;
+        double hargaTiketLansia = adalahAkhirPekan ? 30 : 20;
+
+        double hargaMakanPerOrang = 50; // Contoh harga
+        double totalHargaTiket = 0;
+        double totalHargaMakan = 0;
+
+        for (KategoriUmur kategori : kategoriUmur) {
+            switch (kategori) {
+                case ANAK:
+                    totalHargaTiket += hargaTiketAnak;
+                    break;
+                case DEWASA:
+                    totalHargaTiket += hargaTiketDewasa;
+                    break;
+                case LANSIA:
+                    totalHargaTiket += hargaTiketLansia;
+                    break;
+            }
+            if (inginPaketMakan) {
+                totalHargaMakan += hargaMakanPerOrang;
+            }
+        }
+
+        double totalSebelumDiskon = totalHargaTiket + totalHargaMakan;
+
+        double totalTiketSetelahDiskon = totalHargaTiket;
+        if (jumlahPengunjung > 3) {
+            totalTiketSetelahDiskon *= 0.85; // Diskon 15%
+        }
+
+        double totalSetelahDiskon = totalTiketSetelahDiskon + totalHargaMakan;
+
+        System.out.println("Total harga tiket sebelum diskon: " + totalHargaTiket);
+        System.out.println("Total harga tiket setelah diskon: " + totalTiketSetelahDiskon);
+        System.out.println("Total harga paket makan siang: " + totalHargaMakan);
+        System.out.println("Total keseluruhan sebelum diskon: " + totalSebelumDiskon);
+        System.out.println("Total keseluruhan setelah diskon: " + totalSetelahDiskon);
+        if (jumlahPengunjung > 3) {
+            System.out.println("Diskon 15% telah diterapkan karena pembelian lebih dari 3 tiket.");
+        } else {
+            System.out.println("Tidak ada diskon yang diterapkan, beli lebih dari 3 tiket untuk mendapatkan diskon.");
+        }
+    }
+}
